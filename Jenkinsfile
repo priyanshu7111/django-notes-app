@@ -10,13 +10,11 @@ pipeline{
         stage('clone code'){
             steps{
                 git url: "https://github.com/priyanshu7111/django-notes-app.git", branch: "main"
-                echo "code is cloned"
             }
         }
         stage('build & test'){
             steps{
                 sh "docker build -t notes-app:latest ."
-                echo "code is build and tested"
             }
         }
         stage('Push image to dockerhub'){
@@ -32,14 +30,12 @@ pipeline{
                     sh "docker image tag notes-app:latest ${env.dockerHubUser}/notes-app:latest"
                     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
                     sh "docker push ${env.dockerHubUser}/notes-app:latest"
-                    echo "image pushing to dockerhub"
                 }
             }
         }
         stage('deploy'){
             steps{
                 sh "docker compose up -d"
-                echo "code is deployed"
             }
         }
     }
